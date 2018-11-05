@@ -1,0 +1,151 @@
+#!/bin/bash
+# vim: filetype=sh:
+
+#set -e
+#set +e   # Only uncomment to disable failing on intermediate steps
+
+cd "$(dirname $0)"; cd ..
+
+# if [[ "$1" == "docker" ]]; then
+# 		shift
+#     build-image -f jenkins
+#     run-image dev -c "./bin/test $@"
+#     exit $?
+# fi
+
+OUTPUT_DIR=${OUTPUT_DIR:-_testing_output}
+MODULE_NAME=latok
+
+function unit_test {
+    pytest --color=yes --cov-config coverage.cfg --cov=$MODULE_NAME --cov-fail-under=40 --cov-report term-missing --durations=10 tests | tee -a _testing_output/pytest_output.txt
+    result=${PIPESTATUS[0]}
+    if [ $result -ne 0 ]; then
+        echo "Unit tests failed with code $result"
+        exit $result
+    fi
+}
+function integration_test {
+    # Changing the cov fail to 50 right now to be the build working and will update after
+    pytest --color=yes --cov-config coverage.cfg --cov=$MODULE_NAME --cov-fail-under=40 --cov-report term-missing --durations=10 --slow tests | tee -a _testing_output/pytest_integration_output.txt
+    result=${PIPESTATUS[0]}
+    if [ $result -ne 0 ]; then
+        echo "Integration tests failed with code $result"
+        exit $result
+    fi
+}
+function run_lint {
+    pylint $MODULE_NAME --rcfile=.pylintrc -d C,R | tee $OUTPUT_DIR/pylint_output.txt
+    result=${PIPESTATUS[0]}
+    if [ $result -ne 0 ]; then
+        echo "Pylint failed with code $result"
+    #    exit $result   -  Need to currently disable pylint until linting errors have been fixed.
+    fi
+}
+
+# Parse command line arguments in any order
+verbose='false'
+dflag=''    # use docker
+hflag=''    # show help
+iflag=''    # run integration tests
+lflag=''    # run pylint
+uflag=''    # run unit tests
+while getopts 'dhilu' flag; do    # if a character is followed by a colon, that argument is expected to have an argument.
+  case "${flag}" in
+    d) dflag='true' ;;
+    h) hflag='true' ;;
+    i) iflag='true' ;;
+    l) lflag='true' ;;
+    u) uflag='true' ;;
+    *) error "Unexpected option ${flag}" ;;
+    # v) verbose='true' ;;
+    # f) files="${OPTARG}" ;;
+  esac
+done
+
+
+## HELP
+if [ -n "$hflag" ] || [ -z "$1" ]; then
+    echo "Usage"
+    echo "  $ bin/test [option(s)]"
+    echo
+    echo "Flags can be combined or separate in any order, for example:"
+    echo "  $ bin/test -lid"
+    echo "  $ bin/test -u -l"
+    echo
+    echo "Options"
+    echo -e "  -d, \trun tests in Docker container"
+    echo -e "  -h, \tshow brief Help"
+    echo -e "  -i, \trun Integration tests"
+    echo -e "  -l, \trun pylint"
+    echo -e "  -u, \trun Unit tests"
+    exit 0
+fi
+
+
+## LINT
+#if [ -n "$lflag" ] && [ -z "$dflag" ]; then
+#    pylint $MODULE_NAME --rcfile=.pylintrc -d C,R | tee $OUTPUT_DIR/pylint_output.txt
+#    if [ -z $iflag ] && [ -z $uflag ]; then
+#        exit 0
+#    fi
+#fi
+
+
+if [ -e activate ]; then
+    echo 'activating virtual environment'
+	source ./activate
+fi
+
+
+mkdir -p $OUTPUT_DIR
+
+############################################################################
+#### Run Tests
+############################################################################
+## DOCKER
+if [ -n "$dflag" ]; then
+    build-image base
+    build-image batch
+
+    DOCKER_RUN_FLAGS='-'
+    if [ -n "$lflag" ]; then
+        DOCKER_RUN_FLAGS="${DOCKER_RUN_FLAGS}l"
+    fi
+
+    if [ -n "$iflag" ]; then
+        DOCKER_RUN_FLAGS="${DOCKER_RUN_FLAGS}i"
+    fi
+
+    if [ -n "$uflag" ]; then
+        DOCKER_RUN_FLAGS="${DOCKER_RUN_FLAGS}u"
+    fi
+
+    run-image test -c "./bin/test $DOCKER_RUN_FLAGS"
+    exit $?
+
+## NOT DOCKER
+else
+    if [ -f VERSION ]; then
+        export FILE_OUTPUT="BUILD_ID: $(cat VERSION)"
+    else
+        export GIT_HASH=${GIT_HASH:-$(git log --pretty=format:'%h' -n 1)}
+        export FILE_OUTPUT="GIT_HASH: $GIT_HASH"
+    fi
+
+    if [ -n "$lflag" ]; then
+        echo "Pylint"
+        run_lint
+    fi
+
+    if [ -n "$iflag" ]; then
+        echo "Integration tests"
+        echo $FILE_OUTPUT > $OUTPUT_DIR/pytest_integration_output.txt
+        integration_test
+    fi
+
+    if [ -n "$uflag" ]; then
+        echo "Unit tests"
+        echo $FILE_OUTPUT > $OUTPUT_DIR/pytest_output.txt
+        unit_test
+    fi
+fi

@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# vim: filetype=sh:
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd $DIR
+cd ..
+
+
+echo -e "Cleaning python files (__pycache__, .pyc, .pyo)"
+find . | grep -E "(__pycache__|\.pyc|\.pyo$)" | xargs rm -rf
+
+echo -e "Cleaning build artifacts"
+rm -rf build
+rm -rf *.egg-info
+rm -rf dist
+
+

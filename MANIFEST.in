@@ -1,0 +1,2 @@
+include versioneer.py
+include document_clustering/_version.py

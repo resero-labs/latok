@@ -1,0 +1,6 @@
+-r requirements.txt
+pylint
+pytest
+pytest-cov
+wheel
+vmprof

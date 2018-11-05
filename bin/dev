@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# vim: filetype=sh:
+set -e
+cd "$(dirname $0)"; cd ..;
+
+if [[ $1 != "nobuild" ]]; then
+    build-image base
+fi
+
+run-image dev
+

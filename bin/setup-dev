@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+# vim :set filetype=sh:
+
+cd "$(dirname $0)"; cd ..
+
+
+### ensure ops/bin not in path
+if [[ "$(which run-image)" = *"ops/bin"* ]]; then
+    echo "ops/bin is in your path. This configuration is deprecated. Please remove it from your path"
+    exit -1
+fi
+
+### We need python installed, make sure it's there
+echo "ensuring python is installed"
+if [ ! -x "$(which python3)" ]; then
+    echo "Python3 not found. Please install from https://www.python.org/downloads/"
+    exit -1
+fi
+
+### pip.conf in this directory is used primarily for docker builds. If someone wants to they can
+### manage their own pip.conf, but in most cases, just use the one in the template
+if [ ! -d "pip.conf" ]; then
+    echo "setting up pip.conf for docker builds"
+    cp pip.conf.template pip.conf
+fi
+
+### Before we install a minimal set of packages into the global space, ensure that ~/.pip/pip.conf
+### is pointing to our pypi, otherwise some of these packages won't be available
+echo "ensuring pip is configured to pull from internal pypi"
+if [ ! -e "$HOME/.pip/pip.conf" ]; then
+    echo "You must have a pip.conf in place. It should point to our pypi as well, easy solution... cp ./pip.conf.template ~/.pip/pip.conf"
+    exit -1
+fi
+
+if grep -Fxq "extra-index-url = http://nexus.reserolabs.science/repository/pypi-all/simple" $HOME/.pip/pip.conf
+then
+    #
+    echo ""
+else
+    echo "It appears that you don't have our internal pypi configured. Please see example in pip.conf.template"
+    exit -1
+fi
+
+### Now install minimal set of packages
+echo "Installing requisite python packages into global env"
+pip3 install -U pip awscli credstash "misc-utils[dock]" dockerutils
+
+echo "Ensuring requisite packages in path"
+if [ ! -x "$(which venv)" ]; then
+    echo "It appears that requisite packages are not en path. Most likely issue is that python bin directory is not in path. Modify your shell rc file to include '/Library/Frameworks/Python.framework/Versions/{python_version}/bin' in your path"
+    exit -1
+fi
+
+echo "Setting up the python virtual environment"
+venv-exists
+if [ ! $? -eq 0 ]; then
+  venv
+fi
+
+# This does not activate the virtual environment in the users shell,
+# but it does install the requirements within the virtual environment
+source activate
+pip install -U pip setuptools
+pip install -r requirements-dev.txt
+
