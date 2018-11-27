@@ -32,8 +32,37 @@ Algorithm and Usage:
 
 import latok.core.offsets as oft
 import numpy as np
-from latok.core.latok_utils import gen_block_mask, build_combo_matrix, LaToken
+from latok.core.latok_utils import gen_block_mask, build_combo_matrix, LaToken, OffsetSpec, FeatureSpec
 from latok.latok import _gen_parse_matrix, _combine_matrix_rows
+
+
+#
+# Define offset combinations for tokens
+#
+TWITTER_OFFSETS1 = [oft.TWITTER_IDX, oft.PREV_SPACE_IDX, oft.NEXT_ALPHA_IDX]
+TWITTER_OFFSETS2 = [oft.CHAR_PERIOD_IDX, oft.PREV_SPACE_IDX, oft.NEXT_AT_IDX, oft.AFTER_NEXT_ALPHA_IDX]
+EMAIL_OFFSETS = [oft.CHAR_AT_IDX, oft.PREV_ALPHA_NUM_IDX, oft.NEXT_ALPHA_NUM_IDX]
+URL_OFFSETS = [oft.CHAR_COLON_IDX, oft.NEXT_SLASH_IDX, oft.AFTER_NEXT_SLASH_IDX, oft.PREV_ALPHA_IDX]
+CAMEL_CASE_OFFSETS1 = [oft.UPPER_IDX, oft.NEXT_LOWER_IDX]
+CAMEL_CASE_OFFSETS2 = [oft.UPPER_IDX, oft.PREV_LOWER_IDX]
+
+
+#
+# Define abstracted token features
+#
+TWITTER_FEATURE = FeatureSpec('twitter',
+                              [OffsetSpec(present=TWITTER_OFFSETS1),
+                               OffsetSpec(present=TWITTER_OFFSETS2)],
+                              None, None, None)
+EMAIL_FEATURE = FeatureSpec('email',
+                            [OffsetSpec(present=EMAIL_OFFSETS)],
+                            None, None, None)
+URL_FEATURE = FeatureSpec('url',
+                          [OffsetSpec(present=URL_OFFSETS)],
+                          None, None, None)
+CAMEL_CASE_FEATURE = FeatureSpec('camelcase',
+                                 [OffsetSpec(present=CAMEL_CASE_OFFSETS2)],
+                                 None, None, None)
 
 
 def build_split_combo_matrix():
@@ -50,8 +79,8 @@ def build_split_combo_matrix():
         [oft.SPACE_IDX],
         [oft.SYMBOL_IDX],
         [oft.PREV_SYMBOL_IDX],
-        [oft.UPPER_IDX, oft.NEXT_LOWER_IDX],
-        [oft.UPPER_IDX, oft.PREV_LOWER_IDX],
+        CAMEL_CASE_OFFSETS1,
+        CAMEL_CASE_OFFSETS2,
     ])
 
 
@@ -79,15 +108,15 @@ def build_mask_combo_matrix():
     '''
     return build_combo_matrix([
         # Twitter specials
-        [oft.TWITTER_IDX, oft.PREV_SPACE_IDX, oft.NEXT_ALPHA_IDX],
+        TWITTER_OFFSETS1,
         # twitter .@
-        [oft.CHAR_PERIOD_IDX, oft.PREV_SPACE_IDX, oft.NEXT_AT_IDX, oft.AFTER_NEXT_ALPHA_IDX],
+        TWITTER_OFFSETS2,
 
         # email
-        [oft.CHAR_AT_IDX, oft.PREV_ALPHA_NUM_IDX, oft.NEXT_ALPHA_NUM_IDX],
+        EMAIL_OFFSETS,
 
         # url
-        [oft.CHAR_COLON_IDX, oft.NEXT_SLASH_IDX, oft.AFTER_NEXT_SLASH_IDX, oft.PREV_ALPHA_IDX],
+        URL_OFFSETS,
     ])
     
 
@@ -134,7 +163,7 @@ def gen_split_mask(m: np.ndarray):
     return splits
 
 
-def tokenize(text: str):
+def tokenize(text: str, gen_split_mask_fn=gen_split_mask):
     '''
     Tokenize text using the given split mask generation function, yielding
     each token.
@@ -144,7 +173,7 @@ def tokenize(text: str):
                               and returns a split mask vector.
     '''
     m = _gen_parse_matrix(text)
-    splits = gen_split_mask(m)
+    splits = gen_split_mask_fn(m)
     non_zero = np.nonzero(splits)[0]
     if len(non_zero) > 0:
         str_idx, end_idx = non_zero[0], 0
@@ -160,7 +189,7 @@ def tokenize(text: str):
         yield ''
 
 
-def featurize(text: str):
+def featurize(text: str, gen_split_mask_fn=gen_split_mask):
     '''
     Tokenize text using the given split mask generation function, yielding
     each token tagged with its features.
@@ -170,7 +199,7 @@ def featurize(text: str):
                               and returns a split mask vector.
     '''
     m = _gen_parse_matrix(text)
-    splits = gen_split_mask(m)
+    splits = gen_split_mask_fn(m)
     non_zero = np.nonzero(splits)[0]
     textlen = len(text)
     if len(non_zero) > 0:
@@ -180,15 +209,24 @@ def featurize(text: str):
             if token:
                 yield LaToken(
                     token, str_idx, end_idx,
-                    _combine_matrix_rows(m, np.arange(str_idx, end_idx, dtype=np.int8))
+                    _combine_matrix_rows(m, np.arange(str_idx, end_idx, dtype=np.int8)),
+                    m, None
                 )
             str_idx = end_idx
         last_token = text[end_idx:].strip()
         if last_token:
             yield LaToken(
                 last_token, end_idx, textlen,
-                _combine_matrix_rows(m, np.arange(end_idx, textlen, dtype=np.int8))
+                _combine_matrix_rows(m, np.arange(end_idx, textlen, dtype=np.int8)),
+                m, None
             )
+
+
+def add_abstract_features(la_tokens, feature_specs):
+    for la_token in la_tokens:
+        for feature_spec in feature_specs:
+            if feature_spec.matches(la_token):
+                la_token.add_abstract_feature(feature_spec.name)
 
 
 if __name__ == "__main__":
