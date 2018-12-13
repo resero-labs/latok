@@ -84,6 +84,7 @@ FEATURE_NAMES = [
     'Next_/',
     'After_Next_Alpha',
     'After_Next_/',
+    'Apos',
 ]
 
 

@@ -103,10 +103,11 @@ CHAR_AT_MASK = 0x010000
 CHAR_COLON_MASK = 0x020000
 CHAR_SLASH_MASK = 0x040000
 CHAR_PERIOD_MASK = 0x080000
+CHAR_APOS_MASK = 0x0100000
 
 # NOTE: adjust sizing masks if adding more masks above!
-SIZING_MASK = 0x100000
-DESIZING_MASK = 0x0FFFFF
+SIZING_MASK = 0x1000000
+DESIZING_MASK = 0x0FFFFFF
 
 # these ranges need to match unicodedata.c:is_unified_ideograph
 cjk_ranges = [
@@ -198,6 +199,8 @@ def makeunicodetype(unicode, trace):
                 flags |= CHAR_SLASH_MASK
             if char == 0x002E:
                 flags |= CHAR_PERIOD_MASK
+            if char == 0x0027 or char == 0x2019:
+                flags |= CHAR_APOS_MASK
             sc = unicode.special_casing.get(char)
             cf = unicode.case_folding.get(char, [char])
             if record[12]:
@@ -302,6 +305,7 @@ def makeunicodetype(unicode, trace):
     print("#define CHAR_COLON_MASK 0x020000", file=fp)
     print("#define CHAR_SLASH_MASK 0x040000", file=fp)
     print("#define CHAR_PERIOD_MASK 0x080000", file=fp)
+    print("#define CHAR_APOS_MASK 0x0100000", file=fp)
 
     print(file=fp)
 
@@ -332,7 +336,8 @@ def makeunicodetype(unicode, trace):
     print("#define NEXT_SLASH_IDX 22", file=fp)
     print("#define AFTER_NEXT_ALPHA_IDX 23", file=fp)
     print("#define AFTER_NEXT_SLASH_IDX 24", file=fp)
-    print("#define FEATURE_COUNT 25", file=fp)
+    print("#define CHAR_APOS_IDX 25", file=fp)
+    print("#define FEATURE_COUNT 26", file=fp)
 
 
     print(file=fp)
@@ -462,6 +467,7 @@ def makeunicodetype(unicode, trace):
     print("CHAR_COLON_MASK = 0x020000", file=fp)
     print("CHAR_SLASH_MASK = 0x040000", file=fp)
     print("CHAR_PERIOD_MASK = 0x080000", file=fp)
+    print("CHAR_APOS_MASK = 0x0100000", file=fp)
 
     print(file=fp)
 
@@ -492,7 +498,8 @@ def makeunicodetype(unicode, trace):
     print("NEXT_SLASH_IDX = 22", file=fp)
     print("AFTER_NEXT_ALPHA_IDX = 23", file=fp)
     print("AFTER_NEXT_SLASH_IDX = 24", file=fp)
-    print("FEATURE_COUNT = 25", file=fp)
+    print("CHAR_APOS_IDX = 25", file=fp)
+    print("FEATURE_COUNT = 26", file=fp)
     print(file=fp)
     fp.close()
 

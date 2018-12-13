@@ -43,6 +43,8 @@ TWITTER_OFFSETS1 = [oft.TWITTER_IDX, oft.PREV_SPACE_IDX, oft.NEXT_ALPHA_IDX]
 TWITTER_OFFSETS2 = [oft.CHAR_PERIOD_IDX, oft.PREV_SPACE_IDX, oft.NEXT_AT_IDX, oft.AFTER_NEXT_ALPHA_IDX]
 EMAIL_OFFSETS = [oft.CHAR_AT_IDX, oft.PREV_ALPHA_NUM_IDX, oft.NEXT_ALPHA_NUM_IDX]
 URL_OFFSETS = [oft.CHAR_COLON_IDX, oft.NEXT_SLASH_IDX, oft.AFTER_NEXT_SLASH_IDX, oft.PREV_ALPHA_IDX]
+NUMERIC_OFFSETS = [oft.NUM_IDX]
+EMBEDDED_APOS_OFFSETS = [oft.CHAR_APOS_IDX, oft.PREV_ALPHA_IDX, oft.NEXT_ALPHA_IDX]
 CAMEL_CASE_OFFSETS1 = [oft.UPPER_IDX, oft.NEXT_LOWER_IDX]
 CAMEL_CASE_OFFSETS2 = [oft.UPPER_IDX, oft.PREV_LOWER_IDX]
 
@@ -60,9 +62,15 @@ EMAIL_FEATURE = FeatureSpec('email',
 URL_FEATURE = FeatureSpec('url',
                           [OffsetSpec(present=URL_OFFSETS)],
                           None, None, None)
+NUMERIC_FEATURE = FeatureSpec('numeric',
+                              [OffsetSpec(present=NUMERIC_OFFSETS)],
+                              None, None, None)
 CAMEL_CASE_FEATURE = FeatureSpec('camelcase',
                                  [OffsetSpec(present=CAMEL_CASE_OFFSETS2)],
                                  None, None, None)
+EMBEDDED_APOS_FEATURE = FeatureSpec('apos',
+                                    [OffsetSpec(present=EMBEDDED_APOS_OFFSETS)],
+                                    None, None, None)
 
 
 def build_split_combo_matrix():
@@ -105,6 +113,12 @@ def build_mask_combo_matrix():
        * a colon character
        * following an alphabetic letter and
        * followed by two forward slashes
+    * Numeric tokens:
+       * any number char
+    * Embedded apostrophe tokens
+       * an apostrophe character
+       * preceded by an alphabetic letter and
+       * followed by an alphabetic letter
     '''
     return build_combo_matrix([
         # Twitter specials
@@ -117,6 +131,12 @@ def build_mask_combo_matrix():
 
         # url
         URL_OFFSETS,
+
+        # numeric
+        NUMERIC_OFFSETS,
+
+        # embedded apostrophe
+        EMBEDDED_APOS_OFFSETS,
     ])
     
 
