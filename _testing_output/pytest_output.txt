@@ -1,0 +1,26 @@
+GIT_HASH:
+[1m============================= test session starts ==============================[0m
+platform linux -- Python 3.6.5, pytest-4.0.1, py-1.7.0, pluggy-0.8.0
+rootdir: /workdir, inifile:
+plugins: cov-2.6.0
+collected 1 item
+
+tests/core/test_default_tokenizer.py [32m.[0m[36m                                   [100%][0m
+
+----------- coverage: platform linux, python 3.6.5-final-0 -----------
+Name                              Stmts   Miss  Cover   Missing
+---------------------------------------------------------------
+latok/__init__.py                     3      0   100%
+latok/core/__init__.py                0      0   100%
+latok/core/default_tokenizer.py      81     13    84%   209, 253-267
+latok/core/latok_utils.py           103     28    73%   16, 115, 121, 150, 169-175, 215-220, 222-227, 229-234
+latok/core/offsets.py                48      0   100%
+---------------------------------------------------------------
+TOTAL                               235     41    83%
+
+[32mRequired test coverage of 40% reached. Total coverage: 82.55%
+[0m
+========================== slowest 10 test durations ===========================
+
+(0.00 durations hidden.  Use -vv to show these durations.)
+[32m[1m=========================== 1 passed in 0.38 seconds ===========================[0m
