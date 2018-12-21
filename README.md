@@ -58,7 +58,7 @@ tokenizer.add_abstract_features(tokens, feature_list)
         * Scripts/Shell
             * ```bin/dev```
         * Notebook
-            * ```bin/notebook```
+            * ```run-notebook```
         * Run tests
             * ```bin/test```
 * Through a virtual environment:
