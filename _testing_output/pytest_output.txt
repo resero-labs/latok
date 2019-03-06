@@ -5,22 +5,72 @@ rootdir: /workdir, inifile:
 plugins: cov-2.6.0
 collected 1 item
 
-tests/core/test_default_tokenizer.py [32m.[0m[36m                                   [100%][0m
+tests/core/test_default_tokenizer.py [31mF[0m[36m                                   [100%][0m
+
+=================================== FAILURES ===================================
+[31m[1m____________________ test_default_tokenization_expectations ____________________[0m
+
+[1m    def test_default_tokenization_expectations():[0m
+[1m        text = '''This is a1 test don't http://foo.com?bar=123 @user abc@xyz.com camelCaseOne, CamelCaseTwo, camelCase1, CamelCase2, 123 $123,456.78'''[0m
+[1m    [0m
+[1m        # Token text[0m
+[1m        expected_token_texts = [[0m
+[1m            'This', 'is', 'a1', 'test',[0m
+[1m            "don't",[0m
+[1m            'http://foo.com?bar=123',[0m
+[1m            '@user',[0m
+[1m            'abc@xyz.com',[0m
+[1m            'camel', 'Case', 'One', ',', 'Camel', 'Case', 'Two', ',',[0m
+[1m            'camelCase1', ',', 'CamelCase2',  # NOTE: Not split because these have digits[0m
+[1m            ',', '123', '$123,456.78'[0m
+[1m        ][0m
+[1m        token_texts = list(tokenizer.tokenize(text))[0m
+[1m        assert token_texts == expected_token_texts[0m
+[1m    [0m
+[1m        # Token features[0m
+[1m        expected_features = [[0m
+[1m            ('This', None), ('is', None), ('a1', ['numeric']), ('test', None),[0m
+[1m            ("don't", ['apos']),[0m
+[1m            ('http://foo.com?bar=123', ['url', 'numeric']),[0m
+[1m            ('@user', ['twitter']),[0m
+[1m            ('abc@xyz.com', ['email']),[0m
+[1m            ('camel', None), ('Case', ['camelcase']), ('One', ['camelcase']),[0m
+[1m            (',', ['symbols']),[0m
+[1m            ('Camel', None), ('Case', ['camelcase']), ('Two', ['camelcase']),[0m
+[1m            (',', ['symbols']),[0m
+[1m            ('camelCase1', ['camelcase', 'numeric']), (',', ['symbols']),[0m
+[1m            ('CamelCase2', ['camelcase', 'numeric']), (',', ['symbols']),[0m
+[1m            ('123', ['numeric']), ('$123,456.78', ['numeric'])[0m
+[1m        ][0m
+[1m        tokens = list(tokenizer.featurize(text))[0m
+[1m        tokenizer.add_abstract_features(tokens, [[0m
+[1m            tokenizer.TWITTER_FEATURE, tokenizer.EMAIL_FEATURE,[0m
+[1m            tokenizer.URL_FEATURE, tokenizer.CAMEL_CASE_FEATURE,[0m
+[1m            tokenizer.NUMERIC_FEATURE, tokenizer.EMBEDDED_APOS_FEATURE,[0m
+[1m            tokenizer.SYMBOLS_ONLY_FEATURE,[0m
+[1m        ])[0m
+[1m        features = [(token.text, token.abstract_features) for token in tokens][0m
+[1m>       assert features == expected_features[0m
+[1m[31mE       assert [('This', Non...mbols']), ...] == [('This', None...meric']), ...][0m
+[1m[31mE         At index 4 diff: ("don't", ['apos', 'symbols']) != ("don't", ['apos'])[0m
+[1m[31mE         Use -v to get the full diff[0m
+
+[1m[31mtests/core/test_default_tokenizer.py[0m:44: AssertionError
 
 ----------- coverage: platform linux, python 3.6.5-final-0 -----------
 Name                              Stmts   Miss  Cover   Missing
 ---------------------------------------------------------------
 latok/__init__.py                     3      0   100%
 latok/core/__init__.py                0      0   100%
-latok/core/default_tokenizer.py      81     13    84%   209, 253-267
-latok/core/latok_utils.py           103     28    73%   16, 115, 121, 150, 169-175, 215-220, 222-227, 229-234
+latok/core/default_tokenizer.py      83     13    84%   213, 257-271
+latok/core/latok_utils.py           103     17    83%   16, 115, 121, 171, 173, 222-227, 229-234
 latok/core/offsets.py                48      0   100%
 ---------------------------------------------------------------
-TOTAL                               235     41    83%
+TOTAL                               237     30    87%
 
-[32mRequired test coverage of 40% reached. Total coverage: 82.55%
-[0m
-========================== slowest 10 test durations ===========================
+[32mRequired test coverage of 40% reached. Total coverage: 87.34%
+[0m========================== slowest 10 test durations ===========================
+0.01s call     tests/core/test_default_tokenizer.py::test_default_tokenization_expectations
 
 (0.00 durations hidden.  Use -vv to show these durations.)
-[32m[1m=========================== 1 passed in 0.38 seconds ===========================[0m
+[31m[1m=========================== 1 failed in 0.48 seconds ===========================[0m

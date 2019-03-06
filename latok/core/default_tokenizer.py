@@ -47,7 +47,7 @@ NUMERIC_OFFSETS = [oft.NUM_IDX]
 EMBEDDED_APOS_OFFSETS = [oft.CHAR_APOS_IDX, oft.PREV_ALPHA_IDX, oft.NEXT_ALPHA_IDX]
 CAMEL_CASE_OFFSETS1 = [oft.UPPER_IDX, oft.NEXT_LOWER_IDX]
 CAMEL_CASE_OFFSETS2 = [oft.UPPER_IDX, oft.PREV_LOWER_IDX]
-
+SYMBOLS_OFFSETS = [oft.SYMBOL_IDX]
 
 #
 # Define abstracted token features
@@ -71,7 +71,11 @@ CAMEL_CASE_FEATURE = FeatureSpec('camelcase',
 EMBEDDED_APOS_FEATURE = FeatureSpec('apos',
                                     [OffsetSpec(present=EMBEDDED_APOS_OFFSETS)],
                                     None, None, None)
-
+SYMBOLS_ONLY_FEATURE = FeatureSpec('symbols',
+                                   None,
+                                   [OffsetSpec(present=SYMBOLS_OFFSETS,
+                                               absent=[[oft.ALPHA_IDX], [oft.NUM_IDX]])],
+                                   None, None)
 
 def build_split_combo_matrix():
     '''

@@ -1,18 +1,18 @@
 [7;33m************* Module latok.core.default_tokenizer[0m
 latok/core/default_tokenizer.py:36:0: E0611: [1;31mNo name '_gen_parse_matrix' in module 'latok.latok'[0m ([1;31mno-name-in-module[0m)
 latok/core/default_tokenizer.py:36:0: E0611: [1;31mNo name '_combine_matrix_rows' in module 'latok.latok'[0m ([1;31mno-name-in-module[0m)
-latok/core/default_tokenizer.py:162:19: W0621: [35mRedefining name 'm' from outer scope (line 258)[0m ([35mredefined-outer-name[0m)
-latok/core/default_tokenizer.py:170:4: W0621: [35mRedefining name 'splits' from outer scope (line 260)[0m ([35mredefined-outer-name[0m)
-latok/core/default_tokenizer.py:186:13: W0621: [35mRedefining name 'text' from outer scope (line 253)[0m ([35mredefined-outer-name[0m)
-latok/core/default_tokenizer.py:195:4: W0621: [35mRedefining name 'm' from outer scope (line 258)[0m ([35mredefined-outer-name[0m)
-latok/core/default_tokenizer.py:196:4: W0621: [35mRedefining name 'splits' from outer scope (line 260)[0m ([35mredefined-outer-name[0m)
-latok/core/default_tokenizer.py:197:4: W0621: [35mRedefining name 'non_zero' from outer scope (line 262)[0m ([35mredefined-outer-name[0m)
-latok/core/default_tokenizer.py:201:12: W0621: [35mRedefining name 'token' from outer scope (line 264)[0m ([35mredefined-outer-name[0m)
-latok/core/default_tokenizer.py:212:14: W0621: [35mRedefining name 'text' from outer scope (line 253)[0m ([35mredefined-outer-name[0m)
-latok/core/default_tokenizer.py:221:4: W0621: [35mRedefining name 'm' from outer scope (line 258)[0m ([35mredefined-outer-name[0m)
-latok/core/default_tokenizer.py:222:4: W0621: [35mRedefining name 'splits' from outer scope (line 260)[0m ([35mredefined-outer-name[0m)
-latok/core/default_tokenizer.py:223:4: W0621: [35mRedefining name 'non_zero' from outer scope (line 262)[0m ([35mredefined-outer-name[0m)
-latok/core/default_tokenizer.py:228:12: W0621: [35mRedefining name 'token' from outer scope (line 264)[0m ([35mredefined-outer-name[0m)
+latok/core/default_tokenizer.py:166:19: W0621: [35mRedefining name 'm' from outer scope (line 262)[0m ([35mredefined-outer-name[0m)
+latok/core/default_tokenizer.py:174:4: W0621: [35mRedefining name 'splits' from outer scope (line 264)[0m ([35mredefined-outer-name[0m)
+latok/core/default_tokenizer.py:190:13: W0621: [35mRedefining name 'text' from outer scope (line 257)[0m ([35mredefined-outer-name[0m)
+latok/core/default_tokenizer.py:199:4: W0621: [35mRedefining name 'm' from outer scope (line 262)[0m ([35mredefined-outer-name[0m)
+latok/core/default_tokenizer.py:200:4: W0621: [35mRedefining name 'splits' from outer scope (line 264)[0m ([35mredefined-outer-name[0m)
+latok/core/default_tokenizer.py:201:4: W0621: [35mRedefining name 'non_zero' from outer scope (line 266)[0m ([35mredefined-outer-name[0m)
+latok/core/default_tokenizer.py:205:12: W0621: [35mRedefining name 'token' from outer scope (line 268)[0m ([35mredefined-outer-name[0m)
+latok/core/default_tokenizer.py:216:14: W0621: [35mRedefining name 'text' from outer scope (line 257)[0m ([35mredefined-outer-name[0m)
+latok/core/default_tokenizer.py:225:4: W0621: [35mRedefining name 'm' from outer scope (line 262)[0m ([35mredefined-outer-name[0m)
+latok/core/default_tokenizer.py:226:4: W0621: [35mRedefining name 'splits' from outer scope (line 264)[0m ([35mredefined-outer-name[0m)
+latok/core/default_tokenizer.py:227:4: W0621: [35mRedefining name 'non_zero' from outer scope (line 266)[0m ([35mredefined-outer-name[0m)
+latok/core/default_tokenizer.py:232:12: W0621: [35mRedefining name 'token' from outer scope (line 268)[0m ([35mredefined-outer-name[0m)
 [7;33m************* Module latok.core.latok_utils[0m
 latok/core/latok_utils.py:8:0: E0611: [1;31mNo name '_gen_parse_matrix' in module 'latok.latok'[0m ([1;31mno-name-in-module[0m)
 latok/core/latok_utils.py:8:0: E0611: [1;31mNo name '_gen_block_mask' in module 'latok.latok'[0m ([1;31mno-name-in-module[0m)
@@ -21,7 +21,7 @@ latok/core/latok_utils.py:8:0: E0611: [1;31mNo name '_combine_matrix_rows' in m
 
 Report
 ======
-235 statements analysed.
+237 statements analysed.
 
 Statistics by type
 ------------------
@@ -57,13 +57,13 @@ Raw metrics
 +----------+-------+------+---------+-----------+
 |type      |number |%     |previous |difference |
 +==========+=======+======+=========+===========+
-|code      |288    |50.70 |NC       |NC         |
+|code      |294    |51.40 |NC       |NC         |
 +----------+-------+------+---------+-----------+
-|docstring |191    |33.63 |NC       |NC         |
+|docstring |191    |33.39 |NC       |NC         |
 +----------+-------+------+---------+-----------+
-|comment   |24     |4.23  |NC       |NC         |
+|comment   |24     |4.20  |NC       |NC         |
 +----------+-------+------+---------+-----------+
-|empty     |65     |11.44 |NC       |NC         |
+|empty     |63     |11.01 |NC       |NC         |
 +----------+-------+------+---------+-----------+
 
 
@@ -126,5 +126,5 @@ Messages
 
 
 -----------------------------------
-Your code has been rated at 8.43/10
+Your code has been rated at 8.44/10
 

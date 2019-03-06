@@ -32,6 +32,9 @@ def build_combo_matrix(idx_lists):
     (from offsets.py) to multiply, or effectively "and", and rows
     are added, or effectively "or'd".
 
+    NOTE: if idx_lists is just a list (not a list of lists),
+          then it will be treated as [idx_lists].
+
     Examples:
     (1) to build a combo matrix for identifying a space OR
     a symbol, the input lists would be:
@@ -48,6 +51,10 @@ def build_combo_matrix(idx_lists):
      [oft.CHAR_PERIOD_IDX, oft.PREV_SPACE_IDX, oft.NEXT_AT_IDX,
       oft.AFTER_NEXT_ALPHA_IDX]]
     '''
+    if not isinstance(idx_lists, list):
+        idx_lists = [[idx_lists]]
+    elif len(idx_lists) > 0 and not isinstance(idx_lists[0], list):
+        idx_lists = [idx_lists]
     nrows = len(idx_lists)
     ncols = max(len(idx_list) for idx_list in idx_lists)
     m = np.ones((nrows, ncols), dtype=np.int8) * -1
@@ -128,7 +135,9 @@ class LaToken:
 
 def _apply_combo_matrix(combo_matrix, mt):
     s = _combine_matrix_rows(mt, combo_matrix)
-    return np.nonzero(s)[0]
+    nz = np.nonzero(s)
+    return nz[0]
+    #return np.nonzero(s)[0]
 
 
 class OffsetSpec:
@@ -145,9 +154,9 @@ class OffsetSpec:
         self.pcmat = None
         self.acmat = None
         if present is not None and len(present) > 0:
-            self.pcmat = build_combo_matrix([present])
+            self.pcmat = build_combo_matrix(present)
         if absent is not None and len(absent) > 0:
-            self.acmat = build_combo_matrix([absent])
+            self.acmat = build_combo_matrix(absent)
 
     @property
     def has_present(self):
@@ -166,6 +175,7 @@ class OffsetSpec:
             else:
                 result = True
         if self.has_absent:
+            #import pdb; pdb.set_trace()
             a = _apply_combo_matrix(self.acmat, mt)
             if pa_align and p is not None:
                 a *= p
