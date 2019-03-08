@@ -182,7 +182,8 @@ def gen_split_mask(m: np.ndarray):
     splits += _combine_matrix_rows(m, C_SYM)
 
     # start of string is always a boundary
-    splits[0] = 1
+    if len(splits) > 0:
+        splits[0] = 1
 
     return splits
 
