@@ -1,2 +1,2 @@
-numpy==1.15.3
+numpy==1.16.2
 dataclasses==0.6
