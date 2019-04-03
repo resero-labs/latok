@@ -105,7 +105,6 @@ mkdir -p $OUTPUT_DIR
 ## DOCKER
 if [ -n "$dflag" ]; then
     build-image base
-    build-image batch
 
     DOCKER_RUN_FLAGS='-'
     if [ -n "$lflag" ]; then

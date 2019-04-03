@@ -14,7 +14,7 @@
 # ADD requirements-dev.txt /requirements-dev.txt
 # RUN pip install -r /requirements-dev.txt
 
-FROM rappdw/docker-python-node:p3.6.5-n8.11.3-slim-jessie
+FROM resero/docker-python-node:p3.6.8-n8.15.1-slim-stretch
 
 RUN yarn add puppeteer \
     && yarn cache clean
@@ -30,8 +30,7 @@ ENV NODE_PATH="/node_modules"
 # set up /user-home (which will be mounted from the host os) and symlinks that
 # will be used to preserve .bash_history and .python_history across lanista shell
 # invocations
-RUN chmod 1777 /tmp \
-    && apt-get update && apt-get install -y --allow-unauthenticated --no-install-recommends \
+RUN apt-get update && apt-get install -y --allow-unauthenticated --no-install-recommends \
         ca-certificates \
         distro-info-data \
         fonts-liberation \
@@ -87,8 +86,7 @@ RUN chmod 1777 /tmp \
         xdg-utils \
         build-essential \
     && apt-get clean \
-    && rm -rf /var/tmp /tmp /var/lib/apt/lists/* \
-    && mkdir -p /var/tmp /tmp \
+    && rm -rf /var/tmp/* /tmp/* /var/lib/apt/lists/* \
     && echo "en_US.UTF-8 UTF-8" > /etc/locale.gen \
     && locale-gen \
     && mkdir /user-home \
