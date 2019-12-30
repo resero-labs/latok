@@ -1,11 +1,31 @@
-import latok.core.default_tokenizer as tokenizer
+import latok.core.constants as C
+import latok.core.default_tokenizer as latok
 
 
-def test_default_tokenization_expectations():
+def test_get_specs_and_repls():
+    assert latok.get_specs_and_repls(None) == (None, None)
+    assert latok.get_specs_and_repls([]) == (None, None)
+    specs, repls = latok.get_specs_and_repls([(C.URL_FEATURE, None)])
+    assert (specs, repls) == ([C.URL_FEATURE], None)
+    specs, repls = latok.get_specs_and_repls([(None, '???')])
+    assert (specs, repls) == (None, None)
+    specs, repls = latok.get_specs_and_repls([(C.URL_FEATURE, '_URL')])
+    assert (specs, repls) == ([C.URL_FEATURE], {C.URL_FEATURE.name: '_URL'})
+
+
+def test_default_tokenization_expectations1():
+    tokenizer = latok.DefaultTokenizer()
+    assert tokenizer.split_props1 == latok.DEFAULT_SPLIT_PROPS1
+    assert tokenizer.block_props == latok.DEFAULT_BLOCK_PROPS
+    assert tokenizer.split_props2 == latok.DEFAULT_SPLIT_PROPS2
+    t2 = tokenizer.copy(to_lower=(not tokenizer.to_lower))
+    assert t2.to_lower != tokenizer.to_lower
+
+def test_default_tokenization_expectations2():
     text = '''This is a1 test don't http://foo.com?bar=123 @user abc@xyz.com camelCaseOne, CamelCaseTwo, camelCase1, CamelCase2, 123 $123,456.78'''
 
     # Token text
-    expected_token_texts = [
+    expected_plain_token_texts = [
         'This', 'is', 'a1', 'test',
         "don't",
         'http://foo.com?bar=123',
@@ -15,8 +35,30 @@ def test_default_tokenization_expectations():
         'camelCase1', ',', 'CamelCase2',  # NOTE: Not split because these have digits
         ',', '123', '$123,456.78'
     ]
-    token_texts = list(tokenizer.tokenize(text))
-    assert token_texts == expected_token_texts
+    expected_repl_token_texts = [
+        'This', 'is', '_NUM', 'test',
+        "don't",
+        '_URL',
+        '@user',
+        '_EMAIL',
+        'camel', 'Case', 'One', '_SYM', 'Camel', 'Case', 'Two', '_SYM',
+        'camelCase1', '_SYM', 'CamelCase2',  # NOTE: Not split because these have digits
+        '_SYM', '_NUM', '_NUM'
+    ]
+    tokenizer = latok.DefaultTokenizer(
+        specs_and_repls=[
+            (C.TWITTER_FEATURE, None),
+            (C.EMAIL_FEATURE, '_EMAIL'),
+            (C.URL_FEATURE, '_URL'),
+            (C.CAMEL_CASE_FEATURE, None),
+            (C.NUMERIC_FEATURE, '_NUM'),
+            (C.EMBEDDED_APOS_FEATURE, None),
+            (C.SYMBOLS_ONLY_FEATURE, '_SYM'),
+        ])
+    token_repl_texts = list(tokenizer.tokenize(text))
+    assert token_repl_texts == expected_repl_token_texts
+    token_plain_texts = list(tokenizer.tokenize(text, replace_override=False))
+    assert token_plain_texts == expected_plain_token_texts
 
     # Token features
     expected_features = [
@@ -34,11 +76,5 @@ def test_default_tokenization_expectations():
         ('123', ['numeric']), ('$123,456.78', ['numeric'])
     ]
     tokens = list(tokenizer.featurize(text))
-    tokenizer.add_abstract_features(tokens, [
-        tokenizer.TWITTER_FEATURE, tokenizer.EMAIL_FEATURE,
-        tokenizer.URL_FEATURE, tokenizer.CAMEL_CASE_FEATURE,
-        tokenizer.NUMERIC_FEATURE, tokenizer.EMBEDDED_APOS_FEATURE,
-        tokenizer.SYMBOLS_ONLY_FEATURE,
-    ])
     features = [(token.text, token.abstract_features) for token in tokens]
     assert features == expected_features

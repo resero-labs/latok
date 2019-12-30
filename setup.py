@@ -54,7 +54,7 @@ if __name__ == "__main__":
         platforms = ["Windows", "Linux", "Solaris", "Mac OS-X", "Unix"],
         configuration=configuration,
         install_requires=[
-            "numpy==1.16.2",
+            "numpy==1.18.0",
             "dataclasses==0.6",
         ],
         extras_require={
@@ -69,7 +69,7 @@ if __name__ == "__main__":
             ],
         },
         setup_requires=[
-            'numpy>=1.16.2',
+            'numpy>=1.18.0',
         ]
     )
 

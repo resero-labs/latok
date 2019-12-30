@@ -97,6 +97,14 @@ gen_parse_matrix(PyObject *self, PyObject *args)
         *(m + CHAR_SLASH_IDX ) = flags & CHAR_SLASH_MASK  ? 1 : 0;
         *(m + CHAR_PERIOD_IDX) = flags & CHAR_PERIOD_MASK ? 1 : 0;
         *(m + CHAR_APOS_IDX) = flags & CHAR_APOS_MASK ? 1 : 0;
+        *(m + CHAR_HASH_IDX) = flags & CHAR_HASH_MASK ? 1 : 0;
+        *(m + CHAR_DOLLAR_IDX) = flags & CHAR_DOLLAR_MASK ? 1 : 0;
+        *(m + CHAR_CARET_IDX) = flags & CHAR_CARET_MASK ? 1 : 0;
+        *(m + CHAR_EMOJI_IDX) = flags & CHAR_EMOJI_MASK ? 1 : 0;
+        *(m + CHAR_EMOJI_PRESENTATION_IDX) = flags & CHAR_EMOJI_PRESENTATION_MASK ? 1 : 0;
+        *(m + CHAR_EMOJI_MODIFIER_BASE_IDX) = flags & CHAR_EMOJI_MODIFIER_BASE_MASK ? 1 : 0;
+        *(m + CHAR_EMOJI_COMPONENT_IDX) = flags & CHAR_EMOJI_COMPONENT_MASK ? 1 : 0;
+        *(m + CHAR_EXTENDED_PICTOGRAPHIC_IDX) = flags & CHAR_EXTENDED_PICTOGRAPHIC_MASK ? 1 : 0;
         if (prev >= lower_boundary) {
             // propagate the relevant features from this row into the previous character's row in the "next character" columns
             *(prev + NEXT_ALPHA_IDX    ) = *(m + ALPHA_IDX);

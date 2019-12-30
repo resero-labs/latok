@@ -5,6 +5,7 @@ Utilities for LaTok tokenization.
 import numpy as np
 import re
 from dataclasses import dataclass
+#pylint: disable=no-name-in-module
 from latok.latok import _gen_parse_matrix, _gen_block_mask, _combine_matrix_rows
 
 
@@ -92,6 +93,14 @@ FEATURE_NAMES = [
     'After_Next_Alpha',
     'After_Next_/',
     'Apos',
+    'Hash',
+    'Dollar',
+    'Caret',
+    'Emoji',
+    'Emoji_Presentation',
+    'Emoji_Modifier_Base',
+    'Emoji_Component',
+    'Extended_Pictographic',
 ]
 
 
@@ -114,6 +123,10 @@ class LaToken:
     features: np.ndarray
     m: np.ndarray
     abstract_features: list
+
+    @property
+    def size(self):
+        return len(self.text)
 
     def weight(self, weighting=None):
         '''

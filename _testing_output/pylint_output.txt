@@ -1,27 +1,8 @@
-[7;33m************* Module latok.core.default_tokenizer[0m
-latok/core/default_tokenizer.py:36:0: E0611: [1;31mNo name '_gen_parse_matrix' in module 'latok.latok'[0m ([1;31mno-name-in-module[0m)
-latok/core/default_tokenizer.py:36:0: E0611: [1;31mNo name '_combine_matrix_rows' in module 'latok.latok'[0m ([1;31mno-name-in-module[0m)
-latok/core/default_tokenizer.py:166:19: W0621: [35mRedefining name 'm' from outer scope (line 262)[0m ([35mredefined-outer-name[0m)
-latok/core/default_tokenizer.py:174:4: W0621: [35mRedefining name 'splits' from outer scope (line 264)[0m ([35mredefined-outer-name[0m)
-latok/core/default_tokenizer.py:190:13: W0621: [35mRedefining name 'text' from outer scope (line 257)[0m ([35mredefined-outer-name[0m)
-latok/core/default_tokenizer.py:199:4: W0621: [35mRedefining name 'm' from outer scope (line 262)[0m ([35mredefined-outer-name[0m)
-latok/core/default_tokenizer.py:200:4: W0621: [35mRedefining name 'splits' from outer scope (line 264)[0m ([35mredefined-outer-name[0m)
-latok/core/default_tokenizer.py:201:4: W0621: [35mRedefining name 'non_zero' from outer scope (line 266)[0m ([35mredefined-outer-name[0m)
-latok/core/default_tokenizer.py:205:12: W0621: [35mRedefining name 'token' from outer scope (line 268)[0m ([35mredefined-outer-name[0m)
-latok/core/default_tokenizer.py:216:14: W0621: [35mRedefining name 'text' from outer scope (line 257)[0m ([35mredefined-outer-name[0m)
-latok/core/default_tokenizer.py:225:4: W0621: [35mRedefining name 'm' from outer scope (line 262)[0m ([35mredefined-outer-name[0m)
-latok/core/default_tokenizer.py:226:4: W0621: [35mRedefining name 'splits' from outer scope (line 264)[0m ([35mredefined-outer-name[0m)
-latok/core/default_tokenizer.py:227:4: W0621: [35mRedefining name 'non_zero' from outer scope (line 266)[0m ([35mredefined-outer-name[0m)
-latok/core/default_tokenizer.py:232:12: W0621: [35mRedefining name 'token' from outer scope (line 268)[0m ([35mredefined-outer-name[0m)
-[7;33m************* Module latok.core.latok_utils[0m
-latok/core/latok_utils.py:8:0: E0611: [1;31mNo name '_gen_parse_matrix' in module 'latok.latok'[0m ([1;31mno-name-in-module[0m)
-latok/core/latok_utils.py:8:0: E0611: [1;31mNo name '_gen_block_mask' in module 'latok.latok'[0m ([1;31mno-name-in-module[0m)
-latok/core/latok_utils.py:8:0: E0611: [1;31mNo name '_combine_matrix_rows' in module 'latok.latok'[0m ([1;31mno-name-in-module[0m)
 
 
 Report
 ======
-237 statements analysed.
+359 statements analysed.
 
 Statistics by type
 ------------------
@@ -29,13 +10,13 @@ Statistics by type
 +---------+-------+-----------+-----------+------------+---------+
 |type     |number |old number |difference |%documented |%badname |
 +=========+=======+===========+===========+============+=========+
-|module   |5      |NC         |NC         |NC          |0.00     |
+|module   |6      |NC         |NC         |NC          |0.00     |
 +---------+-------+-----------+-----------+------------+---------+
-|class    |3      |NC         |NC         |NC          |0.00     |
+|class    |4      |NC         |NC         |NC          |0.00     |
 +---------+-------+-----------+-----------+------------+---------+
-|method   |8      |NC         |NC         |NC          |0.00     |
+|method   |24     |NC         |NC         |NC          |0.00     |
 +---------+-------+-----------+-----------+------------+---------+
-|function |11     |NC         |NC         |NC          |0.00     |
+|function |5      |NC         |NC         |NC          |0.00     |
 +---------+-------+-----------+-----------+------------+---------+
 
 
@@ -47,7 +28,7 @@ External dependencies
     dataclasses (latok.core.latok_utils)
     latok 
       \-latok (latok.core.default_tokenizer,latok.core.latok_utils)
-    numpy (latok.core.default_tokenizer,latok.core.latok_utils)
+    numpy (latok.core.constants,latok.core.default_tokenizer,latok.core.latok_utils)
 
 
 
@@ -57,13 +38,13 @@ Raw metrics
 +----------+-------+------+---------+-----------+
 |type      |number |%     |previous |difference |
 +==========+=======+======+=========+===========+
-|code      |294    |51.40 |NC       |NC         |
+|code      |13180  |45.73 |NC       |NC         |
 +----------+-------+------+---------+-----------+
-|docstring |191    |33.39 |NC       |NC         |
+|docstring |15508  |53.81 |NC       |NC         |
 +----------+-------+------+---------+-----------+
-|comment   |24     |4.20  |NC       |NC         |
+|comment   |58     |0.20  |NC       |NC         |
 +----------+-------+------+---------+-----------+
-|empty     |63     |11.01 |NC       |NC         |
+|empty     |73     |0.25  |NC       |NC         |
 +----------+-------+------+---------+-----------+
 
 
@@ -91,40 +72,14 @@ Messages by category
 +-----------+-------+---------+-----------+
 |refactor   |0      |NC       |NC         |
 +-----------+-------+---------+-----------+
-|warning    |12     |NC       |NC         |
+|warning    |0      |NC       |NC         |
 +-----------+-------+---------+-----------+
-|error      |5      |NC       |NC         |
+|error      |0      |NC       |NC         |
 +-----------+-------+---------+-----------+
 
 
 
-% errors / warnings by module
------------------------------
 
-+-----------------------------+------+--------+---------+-----------+
-|module                       |error |warning |refactor |convention |
-+=============================+======+========+=========+===========+
-|latok.core.latok_utils       |60.00 |0.00    |0.00     |0.00       |
-+-----------------------------+------+--------+---------+-----------+
-|latok.core.default_tokenizer |40.00 |100.00  |0.00     |0.00       |
-+-----------------------------+------+--------+---------+-----------+
-
-
-
-Messages
---------
-
-+---------------------+------------+
-|message id           |occurrences |
-+=====================+============+
-|redefined-outer-name |12          |
-+---------------------+------------+
-|no-name-in-module    |5           |
-+---------------------+------------+
-
-
-
-
------------------------------------
-Your code has been rated at 8.44/10
+------------------------------------
+Your code has been rated at 10.00/10
 
