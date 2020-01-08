@@ -487,8 +487,7 @@ class DefaultTokenizer:
                 if token:
                     yield LaToken(
                         token, str_idx, end_idx,
-                        _combine_matrix_rows(
-                            m, np.arange(str_idx, end_idx, dtype=np.int8)),
+                        np.sum(m[np.arange(str_idx, end_idx)], axis=0),
                         m, None
                     )
                 str_idx = end_idx
@@ -496,8 +495,7 @@ class DefaultTokenizer:
             if last_token:
                 yield LaToken(
                     last_token, end_idx, textlen,
-                    _combine_matrix_rows(
-                        m, np.arange(end_idx, textlen, dtype=np.int8)),
+                    np.sum(m[np.arange(str_idx, end_idx)], axis=0),
                     m, None
                 )
     

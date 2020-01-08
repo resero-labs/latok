@@ -1,4 +1,4 @@
-GIT_HASH: 50188de
+GIT_HASH: 559e8a3
 [1m============================= test session starts ==============================[0m
 platform linux -- Python 3.6.8, pytest-5.3.2, py-1.8.1, pluggy-0.13.1
 rootdir: /workdir
@@ -25,4 +25,4 @@ TOTAL                               358     31    91%
 0.01s call     tests/core/test_default_tokenizer.py::test_default_tokenization_expectations2
 
 (0.00 durations hidden.  Use -vv to show these durations.)
-[32m============================== [32m[1m3 passed[0m[32m in 3.09s[0m[32m ===============================[0m
+[32m============================== [32m[1m3 passed[0m[32m in 2.40s[0m[32m ===============================[0m
