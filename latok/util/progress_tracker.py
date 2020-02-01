@@ -40,7 +40,8 @@ class ProgressTracker:
             self.report(show_elapsed=show_elapsed)
 
     def report(self, show_elapsed=True):
-        ''' Report on the current progress '''
+        ''' Report on the current progress, return the latest (count, elapsed time) '''
+        deltatime = 0
         if self._count > self._min_report_count:
             curtime = datetime.now()
             deltatime = (curtime - self._starttime)
@@ -59,3 +60,4 @@ class ProgressTracker:
                     str(rate), self._item_type, elapsed_string),
                       file=self._outfile)
             self._outfile.flush()
+        return self._count, deltatime

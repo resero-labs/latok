@@ -13,11 +13,16 @@ EMOJIS_MASK[[
 #
 # Define common offset combinations for tokens
 #
-TWITTER_OFFSETS1 = [oft.TWITTER_IDX, oft.PREV_SPACE_IDX, oft.NEXT_ALPHA_IDX]
-TWITTER_OFFSETS2 = [oft.CHAR_PERIOD_IDX, oft.PREV_SPACE_IDX, oft.NEXT_AT_IDX, oft.AFTER_NEXT_ALPHA_IDX]
-TWITTER_MENTION_OFFSETS1 = [oft.CHAR_AT_IDX, oft.PREV_SPACE_IDX, oft.NEXT_ALPHA_IDX]
-TWITTER_MENTION_OFFSETS2 = TWITTER_OFFSETS2
-TWITTER_HASHTAG_OFFSETS = [oft.CHAR_HASH_IDX, oft.PREV_SPACE_IDX, oft.NEXT_ALPHA_IDX]
+TWITTER_OFFSETS_1A = [oft.TWITTER_IDX, oft.PREV_SPACE_IDX, oft.NEXT_ALPHA_NUM_IDX]
+TWITTER_OFFSETS_1B = [oft.TWITTER_IDX, oft.PREV_SYMBOL_IDX, oft.NEXT_ALPHA_NUM_IDX]
+TWITTER_OFFSETS_2A = [oft.CHAR_PERIOD_IDX, oft.PREV_SPACE_IDX, oft.NEXT_AT_IDX, oft.AFTER_NEXT_ALPHA_IDX]
+TWITTER_OFFSETS_2B = [oft.CHAR_PERIOD_IDX, oft.PREV_SYMBOL_IDX, oft.NEXT_AT_IDX, oft.AFTER_NEXT_ALPHA_IDX]
+TWITTER_MENTION_OFFSETS_1A = [oft.CHAR_AT_IDX, oft.PREV_SPACE_IDX, oft.NEXT_ALPHA_NUM_IDX]
+TWITTER_MENTION_OFFSETS_1B = [oft.CHAR_AT_IDX, oft.PREV_SYMBOL_IDX, oft.NEXT_ALPHA_NUM_IDX]
+TWITTER_MENTION_OFFSETS_2A = TWITTER_OFFSETS_2A
+TWITTER_MENTION_OFFSETS_2B = TWITTER_OFFSETS_2B
+TWITTER_HASHTAG_OFFSETS_A = [oft.CHAR_HASH_IDX, oft.PREV_SPACE_IDX, oft.NEXT_ALPHA_NUM_IDX]
+TWITTER_HASHTAG_OFFSETS_B = [oft.CHAR_HASH_IDX, oft.PREV_SYMBOL_IDX, oft.NEXT_ALPHA_NUM_IDX]
 EMAIL_OFFSETS = [oft.CHAR_AT_IDX, oft.PREV_ALPHA_NUM_IDX, oft.NEXT_ALPHA_NUM_IDX]
 URL_OFFSETS = [oft.CHAR_COLON_IDX, oft.NEXT_SLASH_IDX, oft.AFTER_NEXT_SLASH_IDX, oft.PREV_ALPHA_IDX]
 NUMERIC_OFFSETS = [oft.NUM_IDX]
@@ -30,15 +35,20 @@ SYMBOLS_OFFSETS = [oft.SYMBOL_IDX]
 # Define common abstracted token features
 #
 TWITTER_FEATURE = FeatureSpec('twitter',
-                              [OffsetSpec(present=TWITTER_OFFSETS1),
-                               OffsetSpec(present=TWITTER_OFFSETS2)],
+                              [OffsetSpec(present=TWITTER_OFFSETS_1A),
+                               OffsetSpec(present=TWITTER_OFFSETS_1B),
+                               OffsetSpec(present=TWITTER_OFFSETS_2A),
+                               OffsetSpec(present=TWITTER_OFFSETS_2B)],
                               None, None, None)
 TWITTER_MENTION_FEATURE = FeatureSpec('mention',
-                              [OffsetSpec(present=TWITTER_MENTION_OFFSETS1),
-                               OffsetSpec(present=TWITTER_MENTION_OFFSETS2)],
+                              [OffsetSpec(present=TWITTER_MENTION_OFFSETS_1A),
+                               OffsetSpec(present=TWITTER_MENTION_OFFSETS_1B),
+                               OffsetSpec(present=TWITTER_MENTION_OFFSETS_2A),
+                               OffsetSpec(present=TWITTER_MENTION_OFFSETS_2B)],
                               None, None, None)
 TWITTER_HASHTAG_FEATURE = FeatureSpec('hashtag',
-                              [OffsetSpec(present=TWITTER_HASHTAG_OFFSETS)],
+                              [OffsetSpec(present=TWITTER_HASHTAG_OFFSETS_A),
+                               OffsetSpec(present=TWITTER_HASHTAG_OFFSETS_B)],
                               None, None, None)
 EMOJI_FEATURE = FeatureSpec('emoji',
                             [OffsetSpec(present=[oft.CHAR_EMOJI_IDX]),

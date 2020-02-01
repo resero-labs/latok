@@ -93,9 +93,9 @@ FEATURE_NAMES = [
     'After_Next_Alpha',
     'After_Next_/',
     'Apos',
-    'Hash',
-    'Dollar',
-    'Caret',
+    '#',
+    '$',
+    '^',
     'Emoji',
     'Emoji_Presentation',
     'Emoji_Modifier_Base',
@@ -107,6 +107,18 @@ FEATURE_NAMES = [
 NUM_FEATURES = len(FEATURE_NAMES)
 
 
+def feature_names(feature_array):
+    '''
+    Convert numeric features into their names in the given numpy array
+    :param feature_array: A numpy array containing feature numbers.
+    :return: A list with feature names
+    '''
+    if feature_array is not None:
+        return np.vectorize(
+            lambda x: FEATURE_NAMES[x] if x>= 0 else '')(feature_array).tolist()
+    return None
+
+
 @dataclass
 class LaToken:
     '''
@@ -116,6 +128,7 @@ class LaToken:
     * end_idx: token end index in its string
     * features: token feature vector
     * m: parse matrix
+    * repl: optional replacement text for the token
     '''
     text: str
     start_idx: int
@@ -123,6 +136,7 @@ class LaToken:
     features: np.ndarray
     m: np.ndarray
     abstract_features: list
+    repl: str
 
     @property
     def size(self):
@@ -256,3 +270,61 @@ class FeatureSpec:
             if not result:
                 return False
         return result
+
+
+def get_specs_and_repls(spec_repl_tuples):
+    '''
+    Given a list of (FeatureSpec, repl_str) tuples,
+    return the list of FeatureSpecs and a map from each FeatureSpec
+    name to its corresponding repl_str.
+
+    NOTE that if an abstract feature is to be generated, but not
+    replaced, then the repl_str of None should be used and the
+    resulting map will not have an entry for the FeatureSpec name.
+
+    NOTE that for tokens having multiple feature_spec matches, this list
+    specifies priority order since only one will be used for replacement.
+
+    :param spec_repl_tuples: a list of (FeatureSpec, repl_str) tuples
+    :return: spec_list, repl_map
+    '''
+    if spec_repl_tuples is None:
+        return None, None
+    specs = list()
+    repls = dict()
+    for spec, repl_str in spec_repl_tuples:
+        if spec is not None:
+            specs.append(spec)
+            if repl_str is not None:
+                repls[spec.name] = repl_str
+    if len(repls) == 0:
+        repls = None
+    if len(specs) == 0:
+        specs = None
+    return specs, repls
+
+
+def combine(fvec1, fvec2, operation):
+    '''
+    Combine the given features masks via the operation.
+
+    if fvec2 is None and operation is 'not', then negate fvec1.
+
+    :param fvec1: The first features vector
+    :param fvec2: The second features vector
+    :param operation: The operation to perform -- 'and', 'or', 'xor',
+        'and_not', 'or_not', 'xor_not'; where "not" operations apply
+        to the second vector (unless it is None).
+    :return: The resultant features mask vector
+    '''
+    if fvec2 is None and operation == 'not':
+        return np.logical_not(fvec1)
+    if operation.endswith('not'):
+        fvec2 = np.logical_not(fvec2)
+    if operation.startswith('and'):
+        fvec1 = fvec1 * fvec2
+    elif operation.startswith('or'):
+        fvec1 = fvec1 + fvec2
+    elif operation.startswith('xor'):
+        fvec1 = np.logical_xor(fvec1, fvec2)
+    return fvec1

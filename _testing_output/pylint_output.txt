@@ -1,8 +1,12 @@
+[7;33m************* Module latok.core.split_mask_generator[0m
+latok/core/split_mask_generator.py:186:1: W0511: [35mtodo: get full mask chain[0m ([35mfixme[0m)
+latok/core/split_mask_generator.py:239:1: W0511: [35mtodo: get full mask chain[0m ([35mfixme[0m)
+latok/core/split_mask_generator.py:241:1: W0511: [35mtodo: get full mask chain[0m ([35mfixme[0m)
 
 
 Report
 ======
-358 statements analysed.
+597 statements analysed.
 
 Statistics by type
 ------------------
@@ -10,13 +14,13 @@ Statistics by type
 +---------+-------+-----------+-----------+------------+---------+
 |type     |number |old number |difference |%documented |%badname |
 +=========+=======+===========+===========+============+=========+
-|module   |6      |NC         |NC         |NC          |0.00     |
+|module   |9      |NC         |NC         |NC          |0.00     |
 +---------+-------+-----------+-----------+------------+---------+
-|class    |4      |NC         |NC         |NC          |0.00     |
+|class    |12     |NC         |NC         |NC          |0.00     |
 +---------+-------+-----------+-----------+------------+---------+
-|method   |24     |NC         |NC         |NC          |0.00     |
+|method   |48     |NC         |NC         |NC          |0.00     |
 +---------+-------+-----------+-----------+------------+---------+
-|function |5      |NC         |NC         |NC          |0.00     |
+|function |10     |NC         |NC         |NC          |20.00    |
 +---------+-------+-----------+-----------+------------+---------+
 
 
@@ -25,10 +29,11 @@ External dependencies
 ---------------------
 ::
 
-    dataclasses (latok.core.latok_utils)
+    dataclasses (latok.core.latok_utils,latok.core.split_mask_generator)
     latok 
-      \-latok (latok.core.default_tokenizer,latok.core.latok_utils)
-    numpy (latok.core.constants,latok.core.default_tokenizer,latok.core.latok_utils)
+      \-latok (latok.core.latok_utils,latok.core.split_mask_generator,latok.core.tokenizer)
+    numpy (latok.core.constants,latok.core.latok_utils,latok.core.split_mask_generator,latok.core.tokenizer)
+    pandas (latok.core.split_mask_generator)
 
 
 
@@ -38,13 +43,13 @@ Raw metrics
 +----------+-------+------+---------+-----------+
 |type      |number |%     |previous |difference |
 +==========+=======+======+=========+===========+
-|code      |13177  |45.72 |NC       |NC         |
+|code      |13464  |45.81 |NC       |NC         |
 +----------+-------+------+---------+-----------+
-|docstring |15511  |53.82 |NC       |NC         |
+|docstring |15661  |53.28 |NC       |NC         |
 +----------+-------+------+---------+-----------+
-|comment   |58     |0.20  |NC       |NC         |
+|comment   |125    |0.43  |NC       |NC         |
 +----------+-------+------+---------+-----------+
-|empty     |73     |0.25  |NC       |NC         |
+|empty     |142    |0.48  |NC       |NC         |
 +----------+-------+------+---------+-----------+
 
 
@@ -55,9 +60,9 @@ Duplication
 +-------------------------+------+---------+-----------+
 |                         |now   |previous |difference |
 +=========================+======+=========+===========+
-|nb duplicated lines      |0     |NC       |NC         |
+|nb duplicated lines      |8     |NC       |NC         |
 +-------------------------+------+---------+-----------+
-|percent duplicated lines |0.000 |NC       |NC         |
+|percent duplicated lines |0.027 |NC       |NC         |
 +-------------------------+------+---------+-----------+
 
 
@@ -72,14 +77,36 @@ Messages by category
 +-----------+-------+---------+-----------+
 |refactor   |0      |NC       |NC         |
 +-----------+-------+---------+-----------+
-|warning    |0      |NC       |NC         |
+|warning    |3      |NC       |NC         |
 +-----------+-------+---------+-----------+
 |error      |0      |NC       |NC         |
 +-----------+-------+---------+-----------+
 
 
 
+% errors / warnings by module
+-----------------------------
 
-------------------------------------
-Your code has been rated at 10.00/10
++--------------------------------+------+--------+---------+-----------+
+|module                          |error |warning |refactor |convention |
++================================+======+========+=========+===========+
+|latok.core.split_mask_generator |0.00  |100.00  |0.00     |0.00       |
++--------------------------------+------+--------+---------+-----------+
+
+
+
+Messages
+--------
+
++-----------+------------+
+|message id |occurrences |
++===========+============+
+|fixme      |3           |
++-----------+------------+
+
+
+
+
+-----------------------------------
+Your code has been rated at 9.95/10
 
