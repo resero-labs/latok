@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-# vim: filetype=sh:
-
-cd "$(dirname $0)"; cd ..;
-
-lanista sync
-build-image -p notebook
-run-image dock-notebook
-lanista sync-back

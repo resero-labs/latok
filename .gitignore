@@ -29,4 +29,5 @@ _version.py.bld
 .data
 scripts/unicode/*.txt
 scripts/unicode/*.zip
+scripts/unicode/Tools
 *.so

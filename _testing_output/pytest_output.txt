@@ -1,0 +1,34 @@
+GIT_HASH: 2ae6eb0
+[1m============================= test session starts ==============================[0m
+platform linux -- Python 3.6.8, pytest-5.3.4, py-1.8.1, pluggy-0.13.1
+rootdir: /workdir
+plugins: cov-2.8.1
+collected 6 items
+
+tests/core/test_latok_utils.py [32m.[0m[32m                                         [ 16%][0m
+tests/core/test_tokenizer.py [32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m                                       [100%][0m
+
+----------- coverage: platform linux, python 3.6.8-final-0 -----------
+Name                                 Stmts   Miss  Cover   Missing
+------------------------------------------------------------------
+latok/__init__.py                        3      0   100%
+latok/core/__init__.py                   0      0   100%
+latok/core/constants.py                 32      0   100%
+latok/core/general_cores.py             34      3    91%   144, 151-153
+latok/core/latok_utils.py              142     35    75%   17, 56, 116-119, 149, 155, 206-212, 252-257, 259-264, 266-271, 321, 323, 328-329
+latok/core/offsets.py                   66      0   100%
+latok/core/split_mask_generator.py     180     88    51%   42, 45-46, 82-92, 99-100, 107-119, 122-132, 135-137, 175, 185, 219-224, 235-240, 339, 357-386, 394-406, 414
+latok/core/tokenizer.py                117     25    79%   98, 127, 133, 140, 144-147, 153, 164-178, 209, 215, 218
+latok/core/twitter_cores.py             23      0   100%
+------------------------------------------------------------------
+TOTAL                                  597    151    75%
+
+[32mRequired test coverage of 40% reached. Total coverage: 74.71%
+[0m
+========================== slowest 10 test durations ===========================
+0.03s call     tests/core/test_tokenizer.py::test_mention_aware_tokenizer
+0.03s call     tests/core/test_tokenizer.py::test_tweet_aware_tokenizer
+0.02s call     tests/core/test_tokenizer.py::test_modified_general_tokenizer
+
+(0.00 durations hidden.  Use -vv to show these durations.)
+[32m============================== [32m[1m6 passed[0m[32m in 2.78s[0m[32m ===============================[0m

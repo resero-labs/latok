@@ -96,6 +96,15 @@ gen_parse_matrix(PyObject *self, PyObject *args)
         *(m + CHAR_COLON_IDX ) = flags & CHAR_COLON_MASK  ? 1 : 0;
         *(m + CHAR_SLASH_IDX ) = flags & CHAR_SLASH_MASK  ? 1 : 0;
         *(m + CHAR_PERIOD_IDX) = flags & CHAR_PERIOD_MASK ? 1 : 0;
+        *(m + CHAR_APOS_IDX) = flags & CHAR_APOS_MASK ? 1 : 0;
+        *(m + CHAR_HASH_IDX) = flags & CHAR_HASH_MASK ? 1 : 0;
+        *(m + CHAR_DOLLAR_IDX) = flags & CHAR_DOLLAR_MASK ? 1 : 0;
+        *(m + CHAR_CARET_IDX) = flags & CHAR_CARET_MASK ? 1 : 0;
+        *(m + CHAR_EMOJI_IDX) = flags & CHAR_EMOJI_MASK ? 1 : 0;
+        *(m + CHAR_EMOJI_PRESENTATION_IDX) = flags & CHAR_EMOJI_PRESENTATION_MASK ? 1 : 0;
+        *(m + CHAR_EMOJI_MODIFIER_BASE_IDX) = flags & CHAR_EMOJI_MODIFIER_BASE_MASK ? 1 : 0;
+        *(m + CHAR_EMOJI_COMPONENT_IDX) = flags & CHAR_EMOJI_COMPONENT_MASK ? 1 : 0;
+        *(m + CHAR_EXTENDED_PICTOGRAPHIC_IDX) = flags & CHAR_EXTENDED_PICTOGRAPHIC_MASK ? 1 : 0;
         if (prev >= lower_boundary) {
             // propagate the relevant features from this row into the previous character's row in the "next character" columns
             *(prev + NEXT_ALPHA_IDX    ) = *(m + ALPHA_IDX);
@@ -225,14 +234,21 @@ gen_block_mask(PyObject *self, PyObject *args)
             for (idx2 = 0; idx2 < a2_nz_len; ++idx2) {
                 long val2 = a2_nz_data[idx2];
                 if (val2 >= val1) {
+                    // zero out all from prev_val2 to current val2, exclusive
                     for (midx = prev_val2+1; midx < val2; ++midx) {
-                      mask_data[midx] = 0;
+                        mask_data[midx] = 0;
                     }
-                    idx1 += 1;
+                    // inc idx1/val1 to beyond val2
+                    while (val1 < val2) {
+                        idx1 += 1;
+                        if (idx1 >= a1_nz_len) {
+                            break;
+                        }
+                        val1 = a1_nz_data[idx1];
+                    }
                     if (idx1 >= a1_nz_len) {
-                      break;
+                        break;
                     }
-                    val1 = a1_nz_data[idx1];
                 }
                 prev_val2 = val2;
             }
